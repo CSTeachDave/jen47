@@ -7,6 +7,8 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&family=Dancing+Script:wght@700&family=Outfit:wght@700&display=swap');
 
+        * { box-sizing: border-box; }
+
         body, html {
             margin: 0;
             padding: 0;
@@ -19,41 +21,42 @@
             justify-content: center;
         }
 
-        /* Fixed background canvas for stars */
+        /* Background Blizzard Canvas */
         #blizzardCanvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             z-index: 1;
             display: block;
         }
 
-        /* Scaled-down centered container for TV safety */
-        .safe-zone {
+        /* TV Safety Container (Shrunk to fit TV overscan) */
+        .tv-safe-zone {
             position: relative;
             z-index: 10;
-            width: 70%; 
+            width: 75%; 
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: space-around;
+            justify-content: center;
+            gap: 40px;
             pointer-events: none;
         }
 
         .text-group {
-            flex: 1;
             text-align: center;
+            flex: 1;
         }
 
         h1 {
             font-family: 'Unbounded', sans-serif;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #fff;
             margin: 0;
             text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(0,0,0,1);
+            text-shadow: 0 0 20px rgba(0,0,0,1), 0 0 10px rgba(255,255,255,0.2);
         }
 
         .name {
@@ -62,51 +65,61 @@
             font-size: 1.5em;
             display: block;
             margin-top: 5px;
-            text-shadow: 0 0 15px rgba(255, 0, 171, 0.8);
+            text-shadow: 0 0 20px rgba(255, 0, 171, 0.9);
         }
 
         .age-text {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: #fff;
             margin-top: 15px;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 10px 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
             display: inline-block;
+            line-height: 1.2;
         }
 
+        /* Photo Frame */
         .photo-frame {
-            width: 260px;
-            height: 260px;
+            width: 280px;
+            height: 280px;
             background: white;
             padding: 8px;
             border: 6px solid #fff;
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slides-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
         }
 
         .slides-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
 
         .slides-container img.active {
-            display: block;
-            animation: kenBurns 1s ease-in-out;
+            opacity: 1;
         }
 
-        @keyframes kenBurns { 
-            from { opacity: 0; } 
-            to { opacity: 1; } 
-        }
-
-        @media (max-width: 900px) {
-            .safe-zone { flex-direction: column; width: 90%; }
+        /* Adjust for vertical TV layouts or smaller screens */
+        @media (max-width: 1000px) {
+            .tv-safe-zone { flex-direction: column; width: 90%; gap: 20px; }
+            h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -114,7 +127,7 @@
 
     <canvas id="blizzardCanvas"></canvas>
 
-    <div class="safe-zone">
+    <div class="tv-safe-zone">
         <div class="text-group">
             <h1>Happy Birthday <span class="name">Jen!</span></h1>
             <div class="age-text">
@@ -123,7 +136,7 @@
         </div>
 
         <div class="photo-frame">
-            <div class="slides-container">
+            <div class="slides-container" id="slider">
                 <img src="pic1.jpg" class="active">
                 <img src="pic2.jpg">
                 <img src="pic3.jpg">
@@ -136,27 +149,30 @@
     </div>
 
     <script>
-        // Photo Slider
-        const images = document.querySelectorAll('.slides-container img');
-        let current = 0;
-        setInterval(() => {
-            images[current].classList.remove('active');
-            current = (current + 1) % images.length;
-            images[current].classList.add('active');
-        }, 3000);
+        // --- RELIABLE SLIDER LOGIC ---
+        const images = document.querySelectorAll('#slider img');
+        let currentIndex = 0;
 
-        // Fixed Blizzard Logic
+        function startSlider() {
+            setInterval(() => {
+                images[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add('active');
+            }, 3500); // 3.5 seconds per photo
+        }
+        
+        // --- INTENSE BLIZZARD LOGIC ---
         const canvas = document.getElementById('blizzardCanvas');
         const ctx = canvas.getContext('2d');
-        let stars = [];
+        let particles = [];
 
-        function setCanvasSize() {
+        function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
 
-        window.addEventListener('resize', setCanvasSize);
-        setCanvasSize();
+        window.addEventListener('resize', resize);
+        resize();
 
         class Particle {
             constructor() {
@@ -165,13 +181,55 @@
             init() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedY = Math.random() * 2 + 1;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 2 + 1.5; // Fast falling
+                this.speedX = (Math.random() - 0.5) * 2;
                 this.opacity = Math.random();
                 this.blink = Math.random() * 0.02 + 0.01;
             }
             update() {
                 this.y += this.speedY;
+                this.x += this.speedX;
                 this.opacity += this.blink;
+                
                 if (this.opacity > 1 || this.opacity < 0.2) this.blink *= -1;
-                if (this.
+                
+                // If star falls off bottom, reset to top
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = "white";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initBlizzard() {
+            particles = [];
+            for (let i = 0; i < 800; i++) { // 800 Stars for Intensity
+                particles.push(new Particle());
+            }
+        }
+
+        function runBlizzard() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(runBlizzard);
+        }
+
+        // Launch everything
+        initBlizzard();
+        runBlizzard();
+        startSlider();
+    </script>
+</body>
+</html>
