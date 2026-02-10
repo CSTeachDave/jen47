@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Jen!</title>
     <style>
-        /* Updated Font Import: Great Vibes replaces Dancing Script */
-        @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&family=Great+Vibes&family=Outfit:wght@700&display=swap');
+        /* Keeping Outfit for the age badge as it stays very readable */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap');
 
         * { box-sizing: border-box; }
 
@@ -22,6 +22,7 @@
             justify-content: center;
         }
 
+        /* Background Blizzard Canvas */
         #blizzardCanvas {
             position: fixed;
             top: 0;
@@ -32,6 +33,7 @@
             display: block;
         }
 
+        /* TV Safety Container */
         .tv-safe-zone {
             position: relative;
             z-index: 10;
@@ -49,25 +51,22 @@
             flex: 1;
         }
 
+        /* Comic Sans Implementation */
         h1 {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 2.2rem;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            font-size: 3rem;
             color: #fff;
             margin: 0;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(0,0,0,1);
+            text-shadow: 0 0 20px rgba(0,0,0,1), 0 0 10px rgba(255,255,255,0.2);
         }
 
-        /* The new font for Jen */
         .name {
-            font-family: 'Great Vibes', cursive;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
             color: #ff00ab;
-            font-size: 1.8em; /* Slightly larger as Great Vibes is a bit finer */
+            font-size: 1.2em;
             display: block;
             margin-top: 5px;
-            text-transform: none;
-            letter-spacing: 1px;
-            text-shadow: 0 0 15px rgba(255, 0, 171, 1), 0 0 30px rgba(255, 0, 171, 0.5);
+            text-shadow: 0 0 20px rgba(255, 0, 171, 0.9);
         }
 
         .age-text {
@@ -84,6 +83,7 @@
             line-height: 1.2;
         }
 
+        /* Photo Frame */
         .photo-frame {
             width: 280px;
             height: 280px;
@@ -118,4 +118,35 @@
         }
 
         @media (max-width: 1000px) {
-            .tv-safe-zone { flex-direction: column
+            .tv-safe-zone { flex-direction: column; width: 90%; gap: 20px; }
+            h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="blizzardCanvas"></canvas>
+
+    <div class="tv-safe-zone">
+        <div class="text-group">
+            <h1>Happy Birthday <span class="name">Jen!</span></h1>
+            <div class="age-text">
+                21 Years and 312 Months<br>old today
+            </div>
+        </div>
+
+        <div class="photo-frame">
+            <div class="slides-container" id="slider">
+                <img src="pic1.jpg" class="active">
+                <img src="pic2.jpg">
+                <img src="pic3.jpg">
+                <img src="pic4.jpg">
+                <img src="pic5.jpg">
+                <img src="pic6.jpg">
+                <img src="pic7.jpg">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---
