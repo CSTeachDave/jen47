@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Jen!</title>
     <style>
-        /* Keeping Outfit for the age badge as it stays very readable */
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap');
 
         * { box-sizing: border-box; }
@@ -22,22 +21,23 @@
             justify-content: center;
         }
 
-        /* Background Blizzard Canvas */
+        /* Background Blizzard Canvas - Explicitly Layered */
         #blizzardCanvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1; /* Background */
             display: block;
+            background: #000;
         }
 
         /* TV Safety Container */
         .tv-safe-zone {
             position: relative;
-            z-index: 10;
-            width: 75%; 
+            z-index: 10; /* Above Blizzard */
+            width: 80%; 
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -51,46 +51,46 @@
             flex: 1;
         }
 
-        /* Comic Sans Implementation */
+        /* Comic Sans as requested */
         h1 {
             font-family: "Comic Sans MS", "Comic Sans", cursive;
-            font-size: 3rem;
+            font-size: 3.2rem;
             color: #fff;
             margin: 0;
-            text-shadow: 0 0 20px rgba(0,0,0,1), 0 0 10px rgba(255,255,255,0.2);
+            text-shadow: 0 0 20px rgba(0,0,0,1), 0 0 10px rgba(255,255,255,0.3);
         }
 
         .name {
             font-family: "Comic Sans MS", "Comic Sans", cursive;
             color: #ff00ab;
-            font-size: 1.2em;
+            font-size: 1.3em;
             display: block;
             margin-top: 5px;
-            text-shadow: 0 0 20px rgba(255, 0, 171, 0.9);
+            text-shadow: 0 0 25px rgba(255, 0, 171, 1);
         }
 
         .age-text {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: #fff;
-            margin-top: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 12px 25px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(10px);
             display: inline-block;
-            line-height: 1.2;
+            line-height: 1.3;
         }
 
         /* Photo Frame */
         .photo-frame {
-            width: 280px;
-            height: 280px;
+            width: 300px;
+            height: 300px;
             background: white;
-            padding: 8px;
-            border: 6px solid #fff;
-            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            padding: 10px;
+            border: 8px solid #fff;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
             flex-shrink: 0;
             position: relative;
             overflow: hidden;
@@ -118,35 +118,3 @@
         }
 
         @media (max-width: 1000px) {
-            .tv-safe-zone { flex-direction: column; width: 90%; gap: 20px; }
-            h1 { font-size: 2.2rem; }
-        }
-    </style>
-</head>
-<body>
-
-    <canvas id="blizzardCanvas"></canvas>
-
-    <div class="tv-safe-zone">
-        <div class="text-group">
-            <h1>Happy Birthday <span class="name">Jen!</span></h1>
-            <div class="age-text">
-                21 Years and 312 Months<br>old today
-            </div>
-        </div>
-
-        <div class="photo-frame">
-            <div class="slides-container" id="slider">
-                <img src="pic1.jpg" class="active">
-                <img src="pic2.jpg">
-                <img src="pic3.jpg">
-                <img src="pic4.jpg">
-                <img src="pic5.jpg">
-                <img src="pic6.jpg">
-                <img src="pic7.jpg">
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ---
