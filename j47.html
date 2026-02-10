@@ -12,82 +12,79 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; 
             background-color: #000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Fixed background canvas for stars */
         #blizzardCanvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1; 
-            background: radial-gradient(circle at center, #222 0%, #000 100%);
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            display: block;
         }
 
-        /* Large safety margin for TV Overscan */
-        .content-layer {
-            position: absolute;
-            top: 10%; 
-            left: 10%;
-            right: 10%;
-            bottom: 10%;
+        /* Scaled-down centered container for TV safety */
+        .safe-zone {
+            position: relative;
+            z-index: 10;
+            width: 70%; 
             display: flex;
-            flex-direction: row; /* Side-by-side for widescreen */
+            flex-direction: row;
             align-items: center;
             justify-content: space-around;
-            z-index: 10;
-            text-align: center;
             pointer-events: none;
         }
 
         .text-group {
             flex: 1;
-            padding-right: 20px;
+            text-align: center;
         }
 
         h1 {
             font-family: 'Unbounded', sans-serif;
-            font-size: 2.2rem; /* Scaled down further */
+            font-size: 2rem;
             color: #fff;
             margin: 0;
             text-transform: uppercase;
-            line-height: 1.1;
-            text-shadow: 0 5px 15px rgba(0,0,0,1);
+            text-shadow: 0 0 20px rgba(0,0,0,1);
         }
 
         .name {
             font-family: 'Dancing Script', cursive;
             color: #ff00ab;
-            font-size: 1.4em;
+            font-size: 1.5em;
             display: block;
             margin-top: 5px;
-            text-shadow: 2px 2px 15px rgba(255, 0, 171, 0.7);
+            text-shadow: 0 0 15px rgba(255, 0, 171, 0.8);
         }
 
         .age-text {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.4rem; /* Scaled down */
+            font-size: 1.3rem;
             color: #fff;
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.15);
             padding: 10px 20px;
-            border-radius: 15px;
+            border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
             display: inline-block;
         }
 
-        /* Scaled-down Photo Frame */
         .photo-frame {
-            width: 280px; 
-            height: 280px;
+            width: 260px;
+            height: 260px;
             background: white;
             padding: 8px;
             border: 6px solid #fff;
             box-shadow: 0 0 40px rgba(0,0,0,0.8);
-            border-radius: 2px;
             flex-shrink: 0;
         }
 
@@ -100,27 +97,24 @@
 
         .slides-container img.active {
             display: block;
-            animation: kenBurns 1.2s ease-in-out;
+            animation: kenBurns 1s ease-in-out;
         }
 
         @keyframes kenBurns { 
-            from { opacity: 0; transform: scale(1.05); } 
-            to { opacity: 1; transform: scale(1); } 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
         }
 
-        /* Mobile/Small Screen fallback */
-        @media (max-width: 800px) {
-            .content-layer { flex-direction: column; }
-            .text-group { padding-right: 0; margin-bottom: 20px; }
+        @media (max-width: 900px) {
+            .safe-zone { flex-direction: column; width: 90%; }
         }
-
     </style>
 </head>
 <body>
 
     <canvas id="blizzardCanvas"></canvas>
 
-    <div class="content-layer">
+    <div class="safe-zone">
         <div class="text-group">
             <h1>Happy Birthday <span class="name">Jen!</span></h1>
             <div class="age-text">
@@ -142,6 +136,7 @@
     </div>
 
     <script>
+        // Photo Slider
         const images = document.querySelectorAll('.slides-container img');
         let current = 0;
         setInterval(() => {
@@ -150,46 +145,33 @@
             images[current].classList.add('active');
         }, 3000);
 
+        // Fixed Blizzard Logic
         const canvas = document.getElementById('blizzardCanvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
 
-        function initCanvas() {
+        function setCanvasSize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
 
-        class Star {
-            constructor() { this.reset(); }
-            reset() {
+        window.addEventListener('resize', setCanvasSize);
+        setCanvasSize();
+
+        class Particle {
+            constructor() {
+                this.init();
+            }
+            init() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 2 + 1;
-                this.speedY = Math.random() * 2 + 1; 
+                this.speedY = Math.random() * 2 + 1;
                 this.opacity = Math.random();
-                this.blink = Math.random() * 0.05;
+                this.blink = Math.random() * 0.02 + 0.01;
             }
             update() {
                 this.y += this.speedY;
                 this.opacity += this.blink;
                 if (this.opacity > 1 || this.opacity < 0.2) this.blink *= -1;
-                if (this.y > canvas.height) this.y = -10;
-            }
-            draw() {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < 300; i++) { stars.push(new Star()); }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(s => { s.update(); s.draw(); });
-            requestAnimationFrame(animate);
-        }
-        animate
+                if (this.
