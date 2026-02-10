@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Jen!</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&family=Dancing+Script:wght@700&family=Outfit:wght@700&display=swap');
+        /* Updated Font Import: Great Vibes replaces Dancing Script */
+        @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&family=Great+Vibes&family=Outfit:wght@700&display=swap');
 
         * { box-sizing: border-box; }
 
@@ -21,7 +22,6 @@
             justify-content: center;
         }
 
-        /* Background Blizzard Canvas */
         #blizzardCanvas {
             position: fixed;
             top: 0;
@@ -32,7 +32,6 @@
             display: block;
         }
 
-        /* TV Safety Container (Shrunk to fit TV overscan) */
         .tv-safe-zone {
             position: relative;
             z-index: 10;
@@ -56,16 +55,19 @@
             color: #fff;
             margin: 0;
             text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(0,0,0,1), 0 0 10px rgba(255,255,255,0.2);
+            text-shadow: 0 0 20px rgba(0,0,0,1);
         }
 
+        /* The new font for Jen */
         .name {
-            font-family: 'Dancing Script', cursive;
+            font-family: 'Great Vibes', cursive;
             color: #ff00ab;
-            font-size: 1.5em;
+            font-size: 1.8em; /* Slightly larger as Great Vibes is a bit finer */
             display: block;
             margin-top: 5px;
-            text-shadow: 0 0 20px rgba(255, 0, 171, 0.9);
+            text-transform: none;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(255, 0, 171, 1), 0 0 30px rgba(255, 0, 171, 0.5);
         }
 
         .age-text {
@@ -82,7 +84,6 @@
             line-height: 1.2;
         }
 
-        /* Photo Frame */
         .photo-frame {
             width: 280px;
             height: 280px;
@@ -116,120 +117,5 @@
             opacity: 1;
         }
 
-        /* Adjust for vertical TV layouts or smaller screens */
         @media (max-width: 1000px) {
-            .tv-safe-zone { flex-direction: column; width: 90%; gap: 20px; }
-            h1 { font-size: 1.8rem; }
-        }
-    </style>
-</head>
-<body>
-
-    <canvas id="blizzardCanvas"></canvas>
-
-    <div class="tv-safe-zone">
-        <div class="text-group">
-            <h1>Happy Birthday <span class="name">Jen!</span></h1>
-            <div class="age-text">
-                21 Years and 312 Months<br>old today
-            </div>
-        </div>
-
-        <div class="photo-frame">
-            <div class="slides-container" id="slider">
-                <img src="pic1.jpg" class="active">
-                <img src="pic2.jpg">
-                <img src="pic3.jpg">
-                <img src="pic4.jpg">
-                <img src="pic5.jpg">
-                <img src="pic6.jpg">
-                <img src="pic7.jpg">
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --- RELIABLE SLIDER LOGIC ---
-        const images = document.querySelectorAll('#slider img');
-        let currentIndex = 0;
-
-        function startSlider() {
-            setInterval(() => {
-                images[currentIndex].classList.remove('active');
-                currentIndex = (currentIndex + 1) % images.length;
-                images[currentIndex].classList.add('active');
-            }, 3500); // 3.5 seconds per photo
-        }
-        
-        // --- INTENSE BLIZZARD LOGIC ---
-        const canvas = document.getElementById('blizzardCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-            constructor() {
-                this.init();
-            }
-            init() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedY = Math.random() * 2 + 1.5; // Fast falling
-                this.speedX = (Math.random() - 0.5) * 2;
-                this.opacity = Math.random();
-                this.blink = Math.random() * 0.02 + 0.01;
-            }
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX;
-                this.opacity += this.blink;
-                
-                if (this.opacity > 1 || this.opacity < 0.2) this.blink *= -1;
-                
-                // If star falls off bottom, reset to top
-                if (this.y > canvas.height) {
-                    this.y = -10;
-                    this.x = Math.random() * canvas.width;
-                }
-            }
-            draw() {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                ctx.shadowBlur = 5;
-                ctx.shadowColor = "white";
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initBlizzard() {
-            particles = [];
-            for (let i = 0; i < 800; i++) { // 800 Stars for Intensity
-                particles.push(new Particle());
-            }
-        }
-
-        function runBlizzard() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(runBlizzard);
-        }
-
-        // Launch everything
-        initBlizzard();
-        runBlizzard();
-        startSlider();
-    </script>
-</body>
-</html>
+            .tv-safe-zone { flex-direction: column
