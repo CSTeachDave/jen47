@@ -21,22 +21,21 @@
             justify-content: center;
         }
 
-        /* Background Blizzard Canvas - Explicitly Layered */
+        /* The Blizzard Layer */
         #blizzardCanvas {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1; /* Background */
-            display: block;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             background: #000;
         }
 
-        /* TV Safety Container */
+        /* The Content Layer */
         .tv-safe-zone {
             position: relative;
-            z-index: 10; /* Above Blizzard */
+            z-index: 10;
             width: 80%; 
             display: flex;
             flex-direction: row;
@@ -51,13 +50,12 @@
             flex: 1;
         }
 
-        /* Comic Sans as requested */
         h1 {
             font-family: "Comic Sans MS", "Comic Sans", cursive;
             font-size: 3.2rem;
             color: #fff;
             margin: 0;
-            text-shadow: 0 0 20px rgba(0,0,0,1), 0 0 10px rgba(255,255,255,0.3);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
         .name {
@@ -80,19 +78,16 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(10px);
             display: inline-block;
-            line-height: 1.3;
         }
 
-        /* Photo Frame */
         .photo-frame {
-            width: 300px;
-            height: 300px;
+            width: 320px;
+            height: 320px;
             background: white;
             padding: 10px;
             border: 8px solid #fff;
             box-shadow: 0 0 50px rgba(0,0,0,1);
             flex-shrink: 0;
-            position: relative;
             overflow: hidden;
         }
 
@@ -118,3 +113,23 @@
         }
 
         @media (max-width: 1000px) {
+            .tv-safe-zone { flex-direction: column; width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="blizzardCanvas"></canvas>
+
+    <div class="tv-safe-zone">
+        <div class="text-group">
+            <h1>Happy Birthday <span class="name">Jen!</span></h1>
+            <div class="age-text">
+                21 Years and 312 Months<br>old today
+            </div>
+        </div>
+
+        <div class="photo-frame">
+            <div class="slides-container" id="slider">
+                <img src="FB_IMG_1770748374795.jpg" class="active">
+                <img src="
